@@ -1,0 +1,3 @@
+option      PPTPOPTIONS
+localip     LOCALPREFIX.0.1
+remoteip    LOCALPREFIX.0.10-100

@@ -18,7 +18,7 @@ if [[ "$IP" = "" ]]; then
 fi
 
 # backup and remove rules with $LOCALIP
-iptables-save | uniq -u > $IPTABLES.backup
+iptables-save > $IPTABLES.backup
 
 IFS=$'\n'
 
@@ -57,6 +57,9 @@ if [ "$DROP" == "$ANSDROP" ]; then
     iptables -I FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
 fi
 
+# MSS Clamping
+iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
 # PPP
 iptables -A INPUT -i ppp+ -j ACCEPT
 iptables -A OUTPUT -o ppp+ -j ACCEPT
@@ -68,4 +71,4 @@ iptables -A INPUT -p tcp --dport 1723 -j ACCEPT
 iptables -A INPUT -p 47 -j ACCEPT
 iptables -A OUTPUT -p 47 -j ACCEPT
 
-iptables-save > $IPTABLES
+iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES

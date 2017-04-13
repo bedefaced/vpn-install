@@ -29,6 +29,14 @@ novjccomp
 nolog
 nologfd
 
+# LCP echo-requests options
+lcp-echo-interval 30
+lcp-echo-failure 5
+
+# MTU MRU options
+mtu 1200
+mru 1200
+
 # DNS options for Windows clients
 ms-dns 8.8.8.8
 ms-dns 8.8.4.4

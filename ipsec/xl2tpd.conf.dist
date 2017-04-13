@@ -1,0 +1,11 @@
+[lns default]
+ip range = LOCALPREFIX.0.10-LOCALPREFIX.0.100
+local ip = LOCALPREFIX.0.1
+refuse pap = yes
+refuse chap = yes
+require authentication = yes
+pppoptfile = PPPCONFIG
+length bit = yes
+exclusive = yes
+ppp debug = no
+assign ip = yes

@@ -72,3 +72,15 @@ iptables -A INPUT -p 47 -j ACCEPT
 iptables -A OUTPUT -p 47 -j ACCEPT
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
+
+IPTABLESRESTOR=$(which iptables-restore)
+RESTORPRESENTS=$(grep iptables-restore $RCLOCAL)
+if [ $? -ne 0 ]; then
+	if [[ ! -z $IPTABLESRESTOR ]]; then
+		sed -i -e "/exit 0/d" $RCLOCAL
+		echo "$IPTABLESRESTOR < $IPTABLES" >> $RCLOCAL
+		echo "exit 0" >> $RCLOCAL
+	else
+		echo "Cannot save iptables-restore from $IPTABLES to $RCLOCAL."
+	fi
+fi

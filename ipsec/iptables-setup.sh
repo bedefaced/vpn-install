@@ -57,6 +57,9 @@ read -p "Would you want to disable client-to-client routing? [yes] " ANSDROP
 if [ "$DROP" == "$ANSDROP" ]; then
     # disable forwarding
     iptables -I FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
+else
+    echo "Deleting DROP rule if exists..."
+    iptables -D FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
 fi
 
 # MSS Clamping
@@ -81,4 +84,10 @@ if [ $? -ne 0 ]; then
 	else
 		echo "Cannot save iptables-restore from $IPTABLES to $RCLOCAL."
 	fi
+fi
+
+iptables -F
+
+if [[ ! -z $IPTABLERESTOR ]]; then
+	$IPTABLESRESTOR < $IPTABLES
 fi

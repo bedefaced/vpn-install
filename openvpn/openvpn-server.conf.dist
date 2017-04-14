@@ -1,0 +1,25 @@
+mode server
+port 1194
+proto udp
+dev DEVICE
+ca CADIR/keys/ca.crt
+cert CADIR/keys/openvpn-server.crt
+key CADIR/keys/openvpn-server.key
+dh CADIR/keys/dh2048.pem
+tls-server
+tls-auth CADIR/ta.key 0
+server LOCALPREFIX.0.0 255.255.255.0
+server-bridge LOCALPREFIX.0.1 255.255.255.0 LOCALPREFIX.0.10 LOCALPREFIX.0.100
+local PUBLICIP
+client-to-client
+cipher DES-EDE3-CBC
+user nobody
+group NOBODYGROUP
+max-clients 100
+keepalive 10 120
+persist-key
+persist-tun
+push "route-gateway dhcp"
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 8.8.8.8"
+push "dhcp-option DNS 8.8.4.4"

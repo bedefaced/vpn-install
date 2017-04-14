@@ -1,0 +1,16 @@
+client
+dev DEVICE
+persist-key
+persist-tun
+cipher DES-EDE3-CBC
+remote IP
+port 1194
+proto udp
+resolv-retry infinite
+redirect-gateway
+tls-client
+tls-auth ta.key 1
+ca ca.crt
+cert LOGIN.crt
+key LOGIN.key 
+

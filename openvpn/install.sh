@@ -119,7 +119,8 @@ do
 
 		echo
 		echo "Created directory $STARTDIR/$LOGIN with necessary files."
-		chown -R ${USER:=$(/usr/bin/id -run)}:$USER $STARTDIR/$LOGIN/
+		USERNAME=${SUDO_USER:-$USER}
+		chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
 
 	fi
 	

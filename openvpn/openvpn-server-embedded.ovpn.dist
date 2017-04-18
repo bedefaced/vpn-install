@@ -3,10 +3,11 @@ dev DEVICE
 persist-key
 persist-tun
 tls-client
+remote-cert-tls server
 cipher DES-EDE3-CBC
 remote IP
 port 1194
 proto udp
 resolv-retry infinite
-redirect-gateway
+redirect-gateway def1
 key-direction 1

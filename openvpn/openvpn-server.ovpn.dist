@@ -7,8 +7,9 @@ remote IP
 port 1194
 proto udp
 resolv-retry infinite
-redirect-gateway
+redirect-gateway def1
 tls-client
+remote-cert-tls server
 tls-auth ta.key 1
 ca ca.crt
 cert LOGIN.crt

@@ -10,7 +10,7 @@ fi
 
 echo
 echo "Installing PPTP server..."
-apt-get install pptpd
+apt-get install pptpd cron
 
 ADDUSER="no"
 ANSUSER="yes"
@@ -46,8 +46,12 @@ echo "Configuring DNS parameters..."
 $DIR/dns.sh
 
 echo
+echo "Adding cron jobs..."
+yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
+$DIR/autostart.sh
+
+echo
 echo "Starting pptpd..."
-systemctl enable pptpd
 service pptpd restart
 
 echo

@@ -10,7 +10,7 @@ fi
 
 echo
 echo "Installing strongSwan and xl2tp server..."
-apt-get install strongswan xl2tpd
+apt-get install strongswan xl2tpd cron iptables procps
 
 ADDUSER="no"
 ANSUSER="yes"

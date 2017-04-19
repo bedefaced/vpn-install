@@ -17,7 +17,7 @@ if [ $? -ne 0 ]; then
 	echo "@reboot $RESTOREPATH <$IPTABLES >/dev/null 2>&1" >> $TMPFILE
 fi
 
-OPENVPNPRESENTS=$(grep "$CHECKSERVER" $TMPFILE)
+SERVERSPRESENTS=$(grep "$CHECKSERVER" $TMPFILE)
 if [ $? -ne 0 ]; then
 	echo "*/5 * * * * $CHECKSERVER >/dev/null 2>&1" >> $TMPFILE
 fi

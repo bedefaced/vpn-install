@@ -12,7 +12,7 @@ fi
 
 echo
 echo "Installing OpenVPN..."
-apt-get install openvpn easy-rsa cron
+apt-get install openvpn easy-rsa cron iptables procps
 
 echo
 echo "Configuring routing..."

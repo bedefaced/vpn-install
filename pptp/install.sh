@@ -10,7 +10,7 @@ fi
 
 echo
 echo "Installing PPTP server..."
-apt-get install pptpd cron
+apt-get install pptpd cron iptables procps
 
 ADDUSER="no"
 ANSUSER="yes"

@@ -5,7 +5,6 @@ OPENVPNDIR=/etc/openvpn
 OPENVPNCONFIG=$OPENVPNDIR/openvpn-server.conf
 CADIR=$OPENVPNDIR/easy-rsa
 IPTABLES=/etc/iptables.rules
-RCLOCAL=/etc/rc.local
 NOBODYGROUP=nogroup
 CHECKSERVER=$OPENVPNDIR/checkserver.sh
 

@@ -6,7 +6,6 @@ XL2TPDCONFIG=/etc/xl2tpd/xl2tpd.conf
 PPPCONFIG=/etc/ppp/options.xl2tpd
 CHAPSECRETS=/etc/ppp/chap-secrets
 IPTABLES=/etc/iptables.rules
-RCLOCAL=/etc/rc.local
 SECRETSFILE=/etc/ipsec.secrets
 CHECKSERVER=/etc/xl2tpd/checkserver.sh
 

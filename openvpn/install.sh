@@ -12,7 +12,7 @@ fi
 
 echo
 echo "Installing OpenVPN..."
-apt-get install openvpn easy-rsa bridge-utils
+apt-get install openvpn easy-rsa cron
 
 echo
 echo "Configuring routing..."
@@ -50,8 +50,12 @@ echo "Configuring VPN users..."
 $DIR/adduser.sh
 
 echo
+echo "Adding cron jobs..."
+yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
+$DIR/autostart.sh
+
+echo
 echo "Starting OpenVPN..."
-systemctl enable openvpn
 service openvpn restart
 
 echo

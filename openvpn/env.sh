@@ -7,6 +7,7 @@ CADIR=$OPENVPNDIR/easy-rsa
 IPTABLES=/etc/iptables.rules
 RCLOCAL=/etc/rc.local
 NOBODYGROUP=nogroup
+CHECKSERVER=$OPENVPNDIR/checkserver.sh
 
 LOCALPREFIX="172.20"
 LOCALIP="$LOCALPREFIX.0.0"

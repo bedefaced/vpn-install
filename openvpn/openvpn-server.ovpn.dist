@@ -1,8 +1,8 @@
 client
-dev DEVICE
+dev tun
 persist-key
 persist-tun
-cipher DES-EDE3-CBC
+cipher AES-256-CBC
 remote IP
 port 1194
 proto udp

@@ -67,9 +67,7 @@ iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS  -
 
 # TUN/TAP
 iptables -A INPUT -i tun+ -j ACCEPT
-iptables -A INPUT -i tap+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
-iptables -A OUTPUT -o tap+ -j ACCEPT
 
 # OpenVPN
 iptables -A INPUT -p udp --dport 1194 -j ACCEPT
@@ -85,4 +83,3 @@ fi
 
 iptables -F
 iptables-restore < $IPTABLES
-

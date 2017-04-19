@@ -73,13 +73,5 @@ iptables -A OUTPUT -o ppp+ -j ACCEPT
 iptables -A INPUT -p tcp --dport 1701 -j ACCEPT
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
-
-RESTORPRESENTS=$(grep iptables-restore $RCLOCAL)
-if [ $? -ne 0 ]; then
-	sed -i -e "/exit 0/d" $RCLOCAL
-	echo "iptables-restore < $IPTABLES" >> $RCLOCAL
-	echo "exit 0" >> $RCLOCAL
-fi
-
 iptables -F
 iptables-restore < $IPTABLES

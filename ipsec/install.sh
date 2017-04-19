@@ -53,9 +53,12 @@ echo "Configuring DNS parameters..."
 $DIR/dns.sh
 
 echo
+echo "Adding cron jobs..."
+yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
+$DIR/autostart.sh
+
+echo
 echo "Starting strongSwan and xl2tp..."
-systemctl enable xl2tpd
-systemctl enable strongswan
 service xl2tpd restart
 service strongswan restart
 

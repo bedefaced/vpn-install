@@ -8,6 +8,7 @@ CHAPSECRETS=/etc/ppp/chap-secrets
 IPTABLES=/etc/iptables.rules
 RCLOCAL=/etc/rc.local
 SECRETSFILE=/etc/ipsec.secrets
+CHECKSERVER=/etc/xl2tpd/checkserver.sh
 
 LOCALPREFIX="172.18"
 LOCALIP="$LOCALPREFIX.0.0"

@@ -62,6 +62,9 @@ else
     iptables -D FORWARD -i tun+ -o tun+ -j DROP
 fi
 
+# Enable forwarding
+iptables -A FORWARD -j ACCEPT
+
 # MSS Clamping
 iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS  --clamp-mss-to-pmtu
 
@@ -70,7 +73,8 @@ iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A OUTPUT -o tun+ -j ACCEPT
 
 # OpenVPN
-iptables -A INPUT -p udp --dport 1194 -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 1194 -j ACCEPT
+iptables -A OUTPUT -p udp -m udp --sport 1194 -j ACCEPT
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
 iptables -F

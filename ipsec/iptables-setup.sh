@@ -57,6 +57,9 @@ else
     iptables -D FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
 fi
 
+# Enable forwarding
+iptables -A FORWARD -j ACCEPT
+
 # MSS Clamping
 iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS  --clamp-mss-to-pmtu
 
@@ -65,7 +68,21 @@ iptables -A INPUT -i ppp+ -j ACCEPT
 iptables -A OUTPUT -o ppp+ -j ACCEPT
 
 # XL2TPD
-iptables -A INPUT -p tcp --dport 1701 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 1701 -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 1701 -j ACCEPT
+iptables -A OUTPUT -p tcp -m tcp --sport 1701 -j ACCEPT
+iptables -A OUTPUT -p udp -m udp --sport 1701 -j ACCEPT
+
+# IPSEC
+iptables -A INPUT -p udp -m udp --dport 500 -j ACCEPT
+iptables -A OUTPUT -p udp -m udp --sport 500 -j ACCEPT
+iptables -A INPUT -p udp -m udp --dport 4500 -j ACCEPT
+iptables -A OUTPUT -p udp -m udp --sport 4500 -j ACCEPT
+iptables -A INPUT -p esp -j ACCEPT
+iptables -A OUTPUT -p esp -j ACCEPT
+iptables -A INPUT -p ah -j ACCEPT
+iptables -A OUTPUT -p ah -j ACCEPT
+
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
 iptables -F

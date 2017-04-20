@@ -6,7 +6,7 @@ if [ $? -eq 1 ]; then
 	/etc/init.d/xl2tpd restart
 fi
 
-RET=$(pgrep strongswan)
+RET=$(pgrep starter)
 
 if [ $? -eq 1 ]; then
 	/etc/init.d/strongswan restart

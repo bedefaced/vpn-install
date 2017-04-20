@@ -3,6 +3,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/env.sh
 
+COMMENT=" -m comment --comment \"OPENVPN\""
+
 if [[ ! -e $IPTABLES ]]; then
 	touch $IPTABLES
 fi
@@ -38,11 +40,11 @@ read -p "Your external IP is $IP. Is this IP static? [yes] " ANSIP
 if [ "$STATIC" == "$ANSIP" ]; then
     # SNAT
     sed -i -e "s@PUBLICIP@$IP@g" $OPENVPNCONFIG
-    iptables -t nat -A POSTROUTING -s $LOCALIPMASK -o $GATE -j SNAT --to-source $IP
+    eval iptables -t nat -A POSTROUTING -s $LOCALIPMASK -o $GATE -j SNAT --to-source $IP $COMMENT
 else
     # MASQUERADE
     sed -i -e "/PUBLICIP/d" $OPENVPNCONFIG
-    iptables -t nat -A POSTROUTING -o $GATE -j MASQUERADE
+    eval iptables -t nat -A POSTROUTING -o $GATE -j MASQUERADE $COMMENT
 fi
 
 DROP="yes"
@@ -52,29 +54,29 @@ read -p "Would you want to disable client-to-client routing? [yes] " ANSDROP
 if [ "$DROP" == "$ANSDROP" ]; then
     # disable forwarding
     sed -i -e "/client-to-client/d" $OPENVPNCONFIG
-    iptables -I FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
-    iptables -A FORWARD -i tun+ -o tun+ -j DROP
-    iptables -A FORWARD -i tap+ -o tap+ -j DROP
+    eval iptables -I FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP $COMMENT
+    eval iptables -A FORWARD -i tun+ -o tun+ -j DROP $COMMENT
+    eval iptables -A FORWARD -i tap+ -o tap+ -j DROP $COMMENT
 else
     echo "Deleting DROP rules if exists..."
-    iptables -D FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP
-    iptables -D FORWARD -i tap+ -o tap+ -j DROP
-    iptables -D FORWARD -i tun+ -o tun+ -j DROP
+    eval iptables -D FORWARD -s $LOCALIPMASK -d $LOCALIPMASK -j DROP $COMMENT
+    eval iptables -D FORWARD -i tap+ -o tap+ -j DROP $COMMENT
+    eval iptables -D FORWARD -i tun+ -o tun+ -j DROP $COMMENT
 fi
 
 # Enable forwarding
-iptables -A FORWARD -j ACCEPT
+eval iptables -A FORWARD -j ACCEPT $COMMENT
 
 # MSS Clamping
-iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS  --clamp-mss-to-pmtu
+eval iptables -t mangle -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS  --clamp-mss-to-pmtu $COMMENT
 
 # TUN/TAP
-iptables -A INPUT -i tun+ -j ACCEPT
-iptables -A OUTPUT -o tun+ -j ACCEPT
+eval iptables -A INPUT -i tun+ -j ACCEPT $COMMENT
+eval iptables -A OUTPUT -o tun+ -j ACCEPT $COMMENT
 
 # OpenVPN
-iptables -A INPUT -p udp -m udp --dport 1194 -j ACCEPT
-iptables -A OUTPUT -p udp -m udp --sport 1194 -j ACCEPT
+eval iptables -A INPUT -p udp -m udp --dport 1194 -j ACCEPT $COMMENT
+eval iptables -A OUTPUT -p udp -m udp --sport 1194 -j ACCEPT $COMMENT
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
 iptables -F

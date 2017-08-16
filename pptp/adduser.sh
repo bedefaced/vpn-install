@@ -25,6 +25,8 @@ do
     echo
 done
 
+DELETED=0
+
 $DIR/checkuser.sh $LOGIN
 
 if [[ $? -eq 0 ]]; then
@@ -36,12 +38,27 @@ if [[ $? -eq 0 ]]; then
 		exit 1
 	else
 		$DIR/deluser.sh $LOGIN
-		# to avoid dublicate message
-		echo -e "$LOGIN\t    *\t    $PASSWORD\t    *" >> $CHAPSECRETS
-		exit 0
+		DELETED=1
 	fi
 fi
 
 echo -e "$LOGIN\t    *\t    $PASSWORD\t    *" >> $CHAPSECRETS
 
-echo "$CHAPSECRETS updated!"
+if [ $DELETED -eq 0 ]; then
+	echo "$CHAPSECRETS updated!"
+fi
+
+STARTDIR=$(pwd)
+
+mkdir "$STARTDIR/$LOGIN"
+DISTFILE=$STARTDIR/$LOGIN/setup.sh
+cp -rf setup.sh.dist "$DISTFILE"
+sed -i -e "s@_LOGIN_@$LOGIN@g" "$DISTFILE"
+sed -i -e "s@_PASSWORD_@$PASSWORD@g" "$DISTFILE"
+sed -i -e "s@_REMOTEIP_@$IP@g" "$DISTFILE"
+sed -i -e "s@_LOCALPREFIX_@$LOCALPREFIX@g" "$DISTFILE"
+chmod +x "$DISTFILE"
+USERNAME=${SUDO_USER:-$USER}
+chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
+echo
+echo "Created directory $STARTDIR/$LOGIN with client-side installation file."

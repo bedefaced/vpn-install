@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+LOGIN=_LOGIN_
+PASSWORD=_PASSWORD_
+REMOTEIP=_REMOTEIP_
+REMOTEIPLOCAL=_LOCALPREFIX_.0.1
+REMOTENAME=PPTP
+
+CHAPSECRETS=/etc/ppp/chap-secrets
+PEERFILE=/etc/ppp/peers/pptpserver
+set -e
+
+if [[ "$EUID" -ne 0 ]]; then
+	echo "Sorry, you need to run this as root"
+	exit 1
+fi
+
+if [[ ! -e $CHAPSECRETS ]] || [[ ! -r $CHAPSECRETS ]]; then
+    echo "$CHAPSECRETS is not exist or not accessible."
+    exit 1
+fi
+
+echo
+echo "Installing necessary packets..."
+
+apt-get install pptp-linux ppp
+modprobe ppp_mppe
+
+chmod u+s `which pptp`
+
+echo
+echo "Remote peer configuration..."
+
+cat <<END >$PEERFILE
+pty "pptp $REMOTEIP --nolaunchpppd"
+name $LOGIN
+noauth
+nobsdcomp
+nodeflate
+usepeerdns
+defaultroute
+replacedefaultroute
+refuse-pap
+refuse-eap
+refuse-chap
+novj
+remotename $REMOTENAME
+require-mppe-128
+END
+
+echo
+echo "Adding user to chap-secrets file..."
+echo -e "$LOGIN\t    $REMOTENAME\t    $PASSWORD\t    *" >> $CHAPSECRETS

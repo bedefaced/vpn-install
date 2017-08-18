@@ -19,6 +19,6 @@ done
 # comment existing PSK
 sed -i -e "/[[:space:]]\+PSK[[:space:]]\+/s/^/# /" $SECRETSFILE
 
-echo "%any %any : PSK \"$PSK\"" >> $SECRETSFILE
+echo -e "\n%any %any : PSK \"$PSK\"" >> $SECRETSFILE
 
 echo "$SECRETSFILE updated!"

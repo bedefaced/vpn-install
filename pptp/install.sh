@@ -17,13 +17,7 @@ ANSUSER="yes"
 
 echo
 echo "Configuring VPN users..."
-while [ "$ANSUSER" != "$ADDUSER" ]; 
-do
-	$DIR/adduser.sh
-
-	read -p "Would you want add another user? [no] " ANSUSER
-	: ${ANSUSER:=$ADDUSER}
-done
+$DIR/adduser.sh
 
 echo
 echo "Configuring iptables firewall..."

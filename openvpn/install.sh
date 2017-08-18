@@ -58,6 +58,7 @@ $DIR/autostart.sh
 
 echo
 echo "Starting OpenVPN..."
+systemctl enable openvpn
 service openvpn restart
 
 echo

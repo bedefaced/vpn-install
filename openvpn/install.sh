@@ -45,6 +45,8 @@ source ./vars
 ./build-dh
 openvpn --genkey --secret ta.key
 
+cd $STARTDIR
+
 echo
 echo "Configuring VPN users..."
 $DIR/adduser.sh

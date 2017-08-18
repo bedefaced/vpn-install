@@ -1,0 +1,5 @@
+[lac L2TP-PSK-NAT]
+lns = REMOTEIP
+ppp debug = no
+pppoptfile = /etc/ppp/options.xl2tpd
+length bit = yes

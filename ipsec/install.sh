@@ -12,23 +12,6 @@ echo
 echo "Installing strongSwan and xl2tp server..."
 apt-get install strongswan xl2tpd cron iptables procps
 
-ADDUSER="no"
-ANSUSER="yes"
-
-echo
-echo "Configuring VPN users..."
-while [ "$ANSUSER" != "$ADDUSER" ]; 
-do
-	$DIR/adduser.sh
-
-	read -p "Would you want add another user? [no] " ANSUSER
-	: ${ANSUSER:=$ADDUSER}
-done
-
-echo
-echo "Configuring PSK..."
-$DIR/psk.sh
-
 echo
 echo "Configuring routing..."
 $DIR/sysctl.sh
@@ -51,6 +34,14 @@ $DIR/iptables-setup.sh
 echo
 echo "Configuring DNS parameters..."
 $DIR/dns.sh
+
+echo
+echo "Configuring PSK..."
+$DIR/psk.sh
+
+echo
+echo "Configuring VPN users..."
+$DIR/adduser.sh
 
 echo
 echo "Adding cron jobs..."

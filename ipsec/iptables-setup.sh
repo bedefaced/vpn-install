@@ -39,11 +39,17 @@ read -p "Your external IP is $IP. Is this IP static? [yes] " ANSIP
 
 if [ "$STATIC" == "$ANSIP" ]; then
     # SNAT
-    sed -i -e "s@PUBLICIP@$IP@g" $IPSECCONFIG
+    sed -i -e "s@LEFTIP@$IP@g" $IPSECCONFIG
+    sed -i -e "s@LEFTPORT@1701@g" $IPSECCONFIG
+    sed -i -e "s@RIGHTIP@%any@g" $IPSECCONFIG
+    sed -i -e "s@RIGHTPORT@%any@g" $IPSECCONFIG
     eval iptables -t nat -A POSTROUTING -s $LOCALIPMASK -o $GATE -j SNAT --to-source $IP $COMMENT
 else
     # MASQUERADE
-    sed -i -e "s@PUBLICIP@%$GATE@g" $IPSECCONFIG
+    sed -i -e "s@LEFTIP@%$GATE@g" $IPSECCONFIG
+    sed -i -e "s@LEFTPORT@1701@g" $IPSECCONFIG
+    sed -i -e "s@RIGHTIP@%any@g" $IPSECCONFIG
+    sed -i -e "s@RIGHTPORT@%any@g" $IPSECCONFIG
     eval iptables -t nat -A POSTROUTING -o $GATE -j MASQUERADE $COMMENT
 fi
 

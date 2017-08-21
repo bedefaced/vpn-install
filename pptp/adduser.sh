@@ -41,7 +41,8 @@ do
 		: ${ANSREM:=$NOTREM}
 	
 		if [ "$NOTREM" == "$ANSREM" ]; then
-			exit 1
+			unset LOGIN PASSWORD
+			continue
 		else
 			$DIR/deluser.sh $LOGIN
 			DELETED=1

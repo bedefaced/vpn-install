@@ -15,9 +15,6 @@ auth
 # Add entry to the ARP system table
 proxyarp
 
-# For the serial device to ensure exclusive access to the device
-lock
-
 # Disable BSD-Compress and Van Jacobson TCP/IP header compression
 nobsdcomp
 novj

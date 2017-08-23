@@ -8,10 +8,10 @@ if [[ ! -e $CHAPSECRETS ]] || [[ ! -r $CHAPSECRETS ]] || [[ ! -w $CHAPSECRETS ]]
     exit 1
 fi
 
-ADDUSER="no"
+NOTADDUSER="no"
 ANSUSER="yes"
 
-while [ "$ANSUSER" != "$ADDUSER" ]; 
+while [ "$ANSUSER" != "$NOTADDUSER" ]; 
 do
 
 	if [[ $# -gt 0 ]]; then
@@ -42,6 +42,10 @@ do
 
 		if [ "$NOTREM" == "$ANSREM" ]; then
 			unset LOGIN PASSWORD
+			if [[ $# -gt 0 ]]; then
+				# exit, if script is called with params
+				ANSUSER=$NOTADDUSER
+			fi
 			continue
 		else
 			$DIR/deluser.sh $LOGIN
@@ -52,14 +56,14 @@ do
 	echo -e "$LOGIN\t    *\t    $PASSWORD\t    *" >> $CHAPSECRETS
 
 	if [ $DELETED -eq 0 ]; then
-		echo "$CHAPSECRETS updated!"
+		echo "$CHAPSECRETS has been updated!"
 	fi
 
 	PSK=$(sed -n "s/^[^#]\+[[:space:]]\+PSK[[:space:]]\+\"\(.\+\)\"/\1/p" $SECRETSFILE)
 
 	STARTDIR=$(pwd)
 
-	mkdir "$STARTDIR/$LOGIN"
+	mkdir -p "$STARTDIR/$LOGIN"
 	DISTFILE=$STARTDIR/$LOGIN/setup.sh
 	cp -rf setup.sh.dist "$DISTFILE"
 	sed -i -e "s@_PSK_@$PSK@g" "$DISTFILE"
@@ -89,14 +93,14 @@ do
 	USERNAME=${SUDO_USER:-$USER}
 	chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
 	echo
-	echo "Created directory $STARTDIR/$LOGIN with client-side installation file."
+	echo "Directory $STARTDIR/$LOGIN with client-side installation script has been created."
 
 	
 	if [[ $# -eq 0 ]]; then
 		echo
-		read -p "Would you want add another user? [no] " ANSUSER
-		: ${ANSUSER:=$ADDUSER}
+		read -p "Would you want to add another user? [no] " ANSUSER
+		: ${ANSUSER:=$NOTADDUSER}
 	else
-		ANSUSER=$ADDUSER
+		ANSUSER=$NOTADDUSER
 	fi
 done

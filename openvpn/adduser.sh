@@ -13,11 +13,15 @@ fi
 cd $CADIR
 source ./vars
 
-ADDUSER="no"
+NOTADDUSER="no"
 ANSUSER="yes"
 
-while [ "$ANSUSER" != "$ADDUSER" ]; 
+while [ "$ANSUSER" != "$NOTADDUSER" ]; 
 do
+	if [[ $# -gt 0 ]]; then
+	    LOGIN="$1"
+	fi
+
 	while [[ -z "$LOGIN" ]];
 	do
 	    read -p "Enter name: " LOGIN
@@ -28,7 +32,7 @@ do
 	if [ $? -eq 0 ]; then
 
 		# copy files and OVPN config
-		mkdir "$STARTDIR/$LOGIN"
+		mkdir -p "$STARTDIR/$LOGIN"
 		cp $CADIR/keys/ca.crt $CADIR/keys/$LOGIN.key $CADIR/keys/$LOGIN.crt ta.key "$STARTDIR/$LOGIN/"
 
 		DIST="$STARTDIR/$LOGIN/openvpn-server.ovpn"
@@ -58,13 +62,18 @@ do
 		echo "</tls-auth>" >> $DIST
 
 		echo
-		echo "Created directory $STARTDIR/$LOGIN with necessary files."
+		echo "Directory $STARTDIR/$LOGIN with necessary files has been created."
 		USERNAME=${SUDO_USER:-$USER}
 		chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
 
 	fi
 	
-	read -p "Would you want add another user? [no] " ANSUSER
-	: ${ANSUSER:=$ADDUSER}
+	if [[ $# -eq 0 ]]; then
+		echo
+		read -p "Would you want to add another user? [no] " ANSUSER
+		: ${ANSUSER:=$NOTADDUSER}
+	else
+		ANSUSER=$NOTADDUSER
+	fi
 done
 

@@ -3,11 +3,11 @@
 RET=$(pgrep xl2tpd)
 
 if [ $? -eq 1 ]; then
-	/etc/init.d/xl2tpd restart
+	systemctl restart xl2tpd
 fi
 
 RET=$(pgrep starter)
 
 if [ $? -eq 1 ]; then
-	/etc/init.d/strongswan restart
+	systemctl restart strongswan
 fi

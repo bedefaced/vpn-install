@@ -10,14 +10,10 @@ fi
 
 echo
 echo "Installing PPTP server..."
-apt-get install pptpd cron iptables procps
+apt-get -y install pptpd cron iptables procps net-tools
 
 ADDUSER="no"
 ANSUSER="yes"
-
-echo
-echo "Configuring VPN users..."
-$DIR/adduser.sh
 
 echo
 echo "Configuring iptables firewall..."
@@ -43,6 +39,10 @@ echo
 echo "Adding cron jobs..."
 yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
 $DIR/autostart.sh
+
+echo
+echo "Configuring VPN users..."
+$DIR/adduser.sh
 
 echo
 echo "Starting pptpd..."

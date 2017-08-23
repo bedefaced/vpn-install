@@ -10,7 +10,7 @@ fi
 
 echo
 echo "Installing strongSwan and xl2tp server..."
-apt-get install strongswan xl2tpd cron iptables procps
+apt-get -y install strongswan xl2tpd cron iptables procps net-tools
 
 echo
 echo "Configuring routing..."
@@ -40,13 +40,13 @@ echo "Configuring PSK..."
 $DIR/psk.sh
 
 echo
-echo "Configuring VPN users..."
-$DIR/adduser.sh
-
-echo
 echo "Adding cron jobs..."
 yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
 $DIR/autostart.sh
+
+echo
+echo "Configuring VPN users..."
+$DIR/adduser.sh
 
 echo
 echo "Starting strongSwan and xl2tp..."

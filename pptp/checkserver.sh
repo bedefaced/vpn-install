@@ -3,5 +3,5 @@
 RET=$(pgrep pptpd)
 
 if [ $? -eq 1 ]; then
-	/etc/init.d/pptpd restart
+	systemctl restart pptpd
 fi

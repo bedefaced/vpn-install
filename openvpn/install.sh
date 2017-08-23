@@ -12,7 +12,7 @@ fi
 
 echo
 echo "Installing OpenVPN..."
-apt-get install openvpn easy-rsa cron iptables procps
+apt-get -y install openvpn easy-rsa cron iptables procps net-tools
 
 echo
 echo "Configuring routing..."
@@ -34,6 +34,10 @@ echo
 echo "Configuring DNS parameters..."
 $DIR/dns.sh
 
+# workaround: Debian's openssl version is not compatible with easy-rsa
+# using openssl-1.0.0.cnf if openssl.cnf not exists
+cp -n /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+
 echo
 echo "Creating server keys..."
 make-cadir $CADIR
@@ -45,21 +49,21 @@ source ./vars
 ./build-dh
 openvpn --genkey --secret ta.key
 
-cd $STARTDIR
-
-echo
-echo "Configuring VPN users..."
-$DIR/adduser.sh
 
 echo
 echo "Adding cron jobs..."
 yes | cp -rf $DIR/checkserver.sh $CHECKSERVER
 $DIR/autostart.sh
 
+cd $STARTDIR
+echo
+echo "Configuring VPN users..."
+$DIR/adduser.sh
+
 echo
 echo "Starting OpenVPN..."
-systemctl enable openvpn
-service openvpn restart
+systemctl -f enable openvpn@openvpn-server
+systemctl restart openvpn@openvpn-server
 
 echo
 echo "Installation script completed!"

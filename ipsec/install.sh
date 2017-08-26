@@ -10,7 +10,13 @@ fi
 
 echo
 echo "Installing strongSwan and xl2tp server..."
-apt-get -y install strongswan xl2tpd cron iptables procps net-tools
+if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
+	apt-get -y install strongswan xl2tpd cron iptables procps net-tools
+fi
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	yum -y install epel-release
+	yum -y install strongswan xl2tpd cronie iptables-services procps net-tools
+fi
 
 echo
 echo "Configuring routing..."

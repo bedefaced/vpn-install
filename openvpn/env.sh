@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+DEBIANPLATFORM="DEBIAN"
+CENTOSPLATFORM="CENTOS"
+
+if [[ -e /etc/version ]]; then
+	PLATFORM=$DEBIANPLATFORM
+fi
+
+if [[ -e /etc/issue ]]; then
+	PLATFORM=$CENTOSPLATFORM
+fi
+
 SYSCTLCONFIG=/etc/sysctl.conf
 OPENVPNDIR=/etc/openvpn
 OPENVPNCONFIG=$OPENVPNDIR/openvpn-server.conf
@@ -7,6 +18,10 @@ CADIR=$OPENVPNDIR/easy-rsa
 IPTABLES=/etc/iptables.rules
 NOBODYGROUP=nogroup
 CHECKSERVER=$OPENVPNDIR/checkserver.sh
+
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	NOBODYGROUP=nobody
+fi
 
 LOCALPREFIX="172.20"
 LOCALIP="$LOCALPREFIX.0.0"

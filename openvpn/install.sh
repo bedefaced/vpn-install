@@ -12,7 +12,13 @@ fi
 
 echo
 echo "Installing OpenVPN..."
-apt-get -y install openvpn easy-rsa cron iptables procps net-tools
+if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
+	apt-get -y install openvpn easy-rsa cron iptables procps net-tools
+fi
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	yum -y install epel-release
+	yum -y install openvpn easy-rsa cronie iptables-services procps net-tools
+fi
 
 echo
 echo "Configuring routing..."
@@ -40,7 +46,13 @@ cp -n /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
 
 echo
 echo "Creating server keys..."
-make-cadir $CADIR
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	mkdir -p "$CADIR/keys"
+	cp -rf /usr/share/easy-rsa/2.0/* $CADIR
+fi
+if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
+	make-cadir $CADIR
+fi
 cd $CADIR
 source ./vars
 ./clean-all

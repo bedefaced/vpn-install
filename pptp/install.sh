@@ -10,7 +10,13 @@ fi
 
 echo
 echo "Installing PPTP server..."
-apt-get -y install pptpd cron iptables procps net-tools
+if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
+	apt-get -y install pptpd cron iptables procps net-tools
+fi
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	yum -y install epel-release
+	yum -y install ppp pptpd cronie iptables-services procps net-tools
+fi
 
 ADDUSER="no"
 ANSUSER="yes"

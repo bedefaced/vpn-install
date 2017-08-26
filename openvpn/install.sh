@@ -40,10 +40,6 @@ echo
 echo "Configuring DNS parameters..."
 $DIR/dns.sh
 
-# workaround: Debian's openssl version is not compatible with easy-rsa
-# using openssl-1.0.0.cnf if openssl.cnf not exists
-cp -n /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
-
 echo
 echo "Creating server keys..."
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
@@ -53,6 +49,11 @@ fi
 if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
 	make-cadir $CADIR
 fi
+
+# workaround: Debian's openssl version is not compatible with easy-rsa
+# using openssl-1.0.0.cnf if openssl.cnf not exists
+cp -n /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+
 cd $CADIR
 source ./vars
 ./clean-all

@@ -98,6 +98,9 @@ eval iptables -A OUTPUT -p esp -j ACCEPT $COMMENT
 eval iptables -A INPUT -p ah -j ACCEPT $COMMENT
 eval iptables -A OUTPUT -p ah -j ACCEPT $COMMENT
 
+# remove standart REJECT rules
+iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
+iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
 iptables -F

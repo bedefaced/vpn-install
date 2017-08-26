@@ -3,11 +3,11 @@
 DEBIANPLATFORM="DEBIAN"
 CENTOSPLATFORM="CENTOS"
 
-if [[ -e /etc/version ]]; then
+if [ -n "$(. /etc/os-release; echo $NAME | grep -i Ubuntu)" -o -n "$(. /etc/os-release; echo $NAME | grep -i Debian)" ]; then
 	PLATFORM=$DEBIANPLATFORM
 fi
 
-if [[ -e /etc/issue ]]; then
+if [ -n "$(. /etc/os-release; echo $NAME | grep -i CentOS)" ]; then
 	PLATFORM=$CENTOSPLATFORM
 fi
 

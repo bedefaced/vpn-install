@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+DEBIANPLATFORM="DEBIAN"
+CENTOSPLATFORM="CENTOS"
+
+if [[ -e /etc/version ]]; then
+	PLATFORM=$DEBIANPLATFORM
+fi
+
+if [[ -e /etc/issue ]]; then
+	PLATFORM=$CENTOSPLATFORM
+fi
+
 SYSCTLCONFIG=/etc/sysctl.conf
 PPTPDCONFIG=/etc/pptpd.conf
 PPTPOPTIONS=/etc/ppp/options.pptp

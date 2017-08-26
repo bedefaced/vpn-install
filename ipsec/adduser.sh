@@ -45,6 +45,9 @@ do
 			if [[ $# -gt 0 ]]; then
 				# exit, if script is called with params
 				ANSUSER=$NOTADDUSER
+			else
+				read -p "Would you want to add another user? [no] " ANSUSER
+				: ${ANSUSER:=$NOTADDUSER}
 			fi
 			continue
 		else
@@ -65,28 +68,28 @@ do
 
 	mkdir -p "$STARTDIR/$LOGIN"
 	DISTFILE=$STARTDIR/$LOGIN/setup.sh
-	cp -rf setup.sh.dist "$DISTFILE"
+	cp -rf $DIR/setup.sh.dist "$DISTFILE"
 	sed -i -e "s@_PSK_@$PSK@g" "$DISTFILE"
 	sed -i -e "s@_SERVERLOCALIP_@$LOCALPREFIX.0.1@g" "$DISTFILE"
 
 	DISTFILE=$STARTDIR/$LOGIN/ipsec.conf
-	cp -rf ipsec.conf.dist "$DISTFILE"
+	cp -rf $DIR/ipsec.conf.dist "$DISTFILE"
 	sed -i -e "s@LEFTIP@%any@g" "$DISTFILE"
 	sed -i -e "s@LEFTPORT@%any@g" "$DISTFILE"
 	sed -i -e "s@RIGHTIP@$IP@g" "$DISTFILE"
 	sed -i -e "s@RIGHTPORT@1701@g" "$DISTFILE"
 
 	DISTFILE=$STARTDIR/$LOGIN/xl2tpd.conf
-	cp -rf client-xl2tpd.conf.dist "$DISTFILE"
+	cp -rf $DIR/client-xl2tpd.conf.dist "$DISTFILE"
 	sed -i -e "s@REMOTEIP@$IP@g" "$DISTFILE"
 
 	DISTFILE=$STARTDIR/$LOGIN/options.xl2tpd
-	cp -rf client-options.xl2tpd.dist "$DISTFILE"
+	cp -rf $DIR/client-options.xl2tpd.dist "$DISTFILE"
 	sed -i -e "s@_LOGIN_@$LOGIN@g" "$DISTFILE"
 	sed -i -e "s@_PASSWORD_@$PASSWORD@g" "$DISTFILE"
 
-	cp -rf connect.sh.dist "$STARTDIR/$LOGIN/connect.sh"
-	cp -rf disconnect.sh.dist "$STARTDIR/$LOGIN/disconnect.sh"
+	cp -rf $DIR/connect.sh.dist "$STARTDIR/$LOGIN/connect.sh"
+	cp -rf $DIR/disconnect.sh.dist "$STARTDIR/$LOGIN/disconnect.sh"
 
 	chmod +x "$STARTDIR/$LOGIN/setup.sh" "$STARTDIR/$LOGIN/connect.sh" "$STARTDIR/$LOGIN/disconnect.sh"
 

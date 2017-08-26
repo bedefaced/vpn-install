@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/env.sh
+
+if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
+	systemctl enable iptables
+	systemctl stop firewalld
+	systemctl disable firewalld
+	systemctl start iptables
+fi
 
 COMMENT=" -m comment --comment \"OPENVPN\""
 
@@ -28,7 +35,7 @@ done
 
 # detect default gateway interface
 echo "Found next network interfaces:"
-ifconfig -a | sed 's/[ \t].*//;/^\(lo\|\)$/d'
+ifconfig -a | sed 's/[: \t].*//;/^\(lo\|\)$/d'
 echo
 GATE=$(route | grep '^default' | grep -o '[^ ]*$')
 read -p "Enter your external network interface: " -i $GATE -e GATE

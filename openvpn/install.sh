@@ -29,6 +29,7 @@ echo
 echo "Installing configuration files..."
 yes | cp -rf $DIR/openvpn-server.conf.dist $OPENVPNCONFIG
 
+sed -i -e "s@OPENVPNDIR@$OPENVPNDIR@g" $OPENVPNCONFIG
 sed -i -e "s@CADIR@$CADIR@g" $OPENVPNCONFIG
 sed -i -e "s@LOCALPREFIX@$LOCALPREFIX@g" $OPENVPNCONFIG
 sed -i -e "s@NOBODYGROUP@$NOBODYGROUP@g" $OPENVPNCONFIG
@@ -63,6 +64,9 @@ source ./vars
 ./build-dh
 openvpn --genkey --secret ta.key
 
+# add dummy user and revoke its certificate for non-empty crl.pem file
+./build-key --batch client000
+./revoke-full client000
 
 echo
 echo "Adding cron jobs..."

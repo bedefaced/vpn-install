@@ -2,6 +2,7 @@ mode server
 port 1194
 proto udp
 dev tun
+crl-verify OPENVPNDIR/crl.pem
 ca CADIR/keys/ca.crt
 cert CADIR/keys/openvpn-server.crt
 key CADIR/keys/openvpn-server.key

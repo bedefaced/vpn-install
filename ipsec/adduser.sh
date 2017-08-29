@@ -48,6 +48,7 @@ do
 			else
 				read -p "Would you want to add another user? [no] " ANSUSER
 				: ${ANSUSER:=$NOTADDUSER}
+				unset LOGIN
 			fi
 			continue
 		else
@@ -101,6 +102,7 @@ do
 		echo
 		read -p "Would you want to add another user? [no] " ANSUSER
 		: ${ANSUSER:=$NOTADDUSER}
+		unset LOGIN
 	else
 		ANSUSER=$NOTADDUSER
 	fi

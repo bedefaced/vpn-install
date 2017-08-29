@@ -66,7 +66,7 @@ openvpn --genkey --secret ta.key
 
 # add dummy user and revoke its certificate for non-empty crl.pem file
 ./build-key --batch client000
-./revoke-full client000
+$DIR/deluser.sh client000
 
 echo
 echo "Adding cron jobs..."

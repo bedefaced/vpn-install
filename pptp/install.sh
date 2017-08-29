@@ -9,14 +9,15 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 echo
+echo "Creating backup..."
+$DIR/backup.sh
+
+echo
 echo "Installing PPTP server..."
-if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
-	apt-get -y install pptpd cron iptables procps net-tools
-fi
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	yum -y install epel-release
-	yum -y install ppp pptpd cronie iptables-services procps net-tools
 fi
+eval $INSTALLER ppp pptpd $CRON_PACKAGE $IPTABLES_PACKAGE procps net-tools
 
 ADDUSER="no"
 ANSUSER="yes"
@@ -55,5 +56,5 @@ echo "Starting pptpd..."
 service pptpd restart
 
 echo
-echo "Installation script completed!"
+echo "Installation script has been completed!"
 

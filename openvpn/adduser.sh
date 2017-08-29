@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-STARTDIR=$(pwd)
-
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source $DIR/env.sh
 
@@ -32,16 +30,16 @@ do
 	if [ $? -eq 0 ]; then
 
 		# copy files and OVPN config
-		mkdir -p "$STARTDIR/$LOGIN"
-		cp $CADIR/keys/ca.crt $CADIR/keys/$LOGIN.key $CADIR/keys/$LOGIN.crt ta.key "$STARTDIR/$LOGIN/"
+		mkdir -p "$DIR/$LOGIN"
+		cp $CADIR/keys/ca.crt $CADIR/keys/$LOGIN.key $CADIR/keys/$LOGIN.crt ta.key "$DIR/$LOGIN/"
 
-		DIST="$STARTDIR/$LOGIN/openvpn-server.ovpn"
+		DIST="$DIR/$LOGIN/openvpn-server.ovpn"
 		cp $DIR/openvpn-server.ovpn.dist $DIST
 		sed -i -e "s@LOGIN@$LOGIN@g" $DIST
 		sed -i -e "s@IP@$IP@g" $DIST
 
-		SRC="$STARTDIR/$LOGIN"
-		DIST="$STARTDIR/$LOGIN/openvpn-server-embedded.ovpn"
+		SRC="$DIR/$LOGIN"
+		DIST="$DIR/$LOGIN/openvpn-server-embedded.ovpn"
 		cp $DIR/openvpn-server-embedded.ovpn.dist $DIST
 		sed -i -e "s@IP@$IP@g" $DIST
 
@@ -62,9 +60,9 @@ do
 		echo "</tls-auth>" >> $DIST
 
 		echo
-		echo "Directory $STARTDIR/$LOGIN with necessary files has been created."
+		echo "Directory $DIR/$LOGIN with necessary files has been created."
 		USERNAME=${SUDO_USER:-$USER}
-		chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
+		chown -R $USERNAME:$USERNAME $DIR/$LOGIN/
 
 	fi
 	

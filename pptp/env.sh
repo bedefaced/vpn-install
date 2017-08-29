@@ -5,10 +5,20 @@ CENTOSPLATFORM="CENTOS"
 
 if [ -n "$(. /etc/os-release; echo $NAME | grep -i Ubuntu)" -o -n "$(. /etc/os-release; echo $NAME | grep -i Debian)" ]; then
 	PLATFORM=$DEBIANPLATFORM
+
+	IPTABLES_PACKAGE="iptables"
+	CRON_PACKAGE="cron"
+	INSTALLER="apt-get -y install"
+	UNINSTALLER="apt-get purge --auto-remove"
 fi
 
 if [ -n "$(. /etc/os-release; echo $NAME | grep -i CentOS)" ]; then
 	PLATFORM=$CENTOSPLATFORM
+
+	IPTABLES_PACKAGE="iptables-services"
+	CRON_PACKAGE="cronie"
+	INSTALLER="yum -y install"
+	UNINSTALLER="yum remove"
 fi
 
 SYSCTLCONFIG=/etc/sysctl.conf
@@ -17,6 +27,7 @@ PPTPOPTIONS=/etc/ppp/options.pptp
 CHAPSECRETS=/etc/ppp/chap-secrets
 IPTABLES=/etc/iptables.rules
 CHECKSERVER=/etc/ppp/checkserver.sh
+IPTABLES_COMMENT="PPTP"
 
 LOCALPREFIX="172.16"
 LOCALIP="$LOCALPREFIX.0.0"

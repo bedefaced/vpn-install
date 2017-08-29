@@ -5,10 +5,20 @@ CENTOSPLATFORM="CENTOS"
 
 if [ -n "$(. /etc/os-release; echo $NAME | grep -i Ubuntu)" -o -n "$(. /etc/os-release; echo $NAME | grep -i Debian)" ]; then
 	PLATFORM=$DEBIANPLATFORM
+
+	IPTABLES_PACKAGE="iptables"
+	CRON_PACKAGE="cron"
+	INSTALLER="apt-get -y install"
+	UNINSTALLER="apt-get purge --auto-remove"
 fi
 
 if [ -n "$(. /etc/os-release; echo $NAME | grep -i CentOS)" ]; then
 	PLATFORM=$CENTOSPLATFORM
+
+	IPTABLES_PACKAGE="iptables-services"
+	CRON_PACKAGE="cronie"
+	INSTALLER="yum -y install"
+	UNINSTALLER="yum remove"
 fi
 
 SYSCTLCONFIG=/etc/sysctl.conf
@@ -18,6 +28,7 @@ CADIR=$OPENVPNDIR/easy-rsa
 IPTABLES=/etc/iptables.rules
 NOBODYGROUP=nogroup
 CHECKSERVER=$OPENVPNDIR/checkserver.sh
+IPTABLES_COMMENT="OPENVPN"
 
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	NOBODYGROUP=nobody

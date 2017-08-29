@@ -11,14 +11,15 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 echo
+echo "Creating backup..."
+$DIR/backup.sh
+
+echo
 echo "Installing OpenVPN..."
-if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
-	apt-get -y install openvpn easy-rsa cron iptables procps net-tools
-fi
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	yum -y install epel-release
-	yum -y install openvpn easy-rsa cronie iptables-services procps net-tools
 fi
+eval $INSTALLER openvpn easy-rsa $CRON_PACKAGE $IPTABLES_PACKAGE procps net-tools
 
 echo
 echo "Configuring routing..."
@@ -79,5 +80,5 @@ systemctl -f enable openvpn@openvpn-server
 systemctl restart openvpn@openvpn-server
 
 echo
-echo "Installation script completed!"
+echo "Installation script has been completed!"
 

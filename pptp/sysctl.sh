@@ -30,10 +30,5 @@ sed -i -e "/net.ipv4.icmp_ignore_bogus_error_responses/d" $SYSCTLCONFIG
 echo "net.ipv4.icmp_ignore_bogus_error_responses=1" >> $SYSCTLCONFIG
 
 sysctl -p
-if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
-	service procps restart
-fi
-if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
-	service network restart
-fi
 
+cat /etc/sysctl.d/*.conf /etc/sysctl.conf | sysctl -e -p -

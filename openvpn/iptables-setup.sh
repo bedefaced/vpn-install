@@ -10,7 +10,12 @@ if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	systemctl start iptables
 fi
 
-COMMENT=" -m comment --comment \"OPENVPN\""
+if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
+	systemctl stop ufw
+	systemctl disable ufw
+fi
+
+COMMENT=" -m comment --comment \"$IPTABLES_COMMENT\""
 
 if [[ ! -e $IPTABLES ]]; then
 	touch $IPTABLES
@@ -21,8 +26,11 @@ if [[ ! -e $IPTABLES ]] || [[ ! -r $IPTABLES ]] || [[ ! -w $IPTABLES ]]; then
     exit 1
 fi
 
-# backup and remove rules with $LOCALIP
-iptables-save > $IPTABLES.backup
+# clear existing rules
+iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
+sed -i -e "/--comment $IPTABLES_COMMENT/d" $IPTABLES
+iptables -F
+iptables-restore < $IPTABLES
 
 IFS=$'\n'
 
@@ -85,9 +93,10 @@ eval iptables -A OUTPUT -o tun+ -j ACCEPT $COMMENT
 eval iptables -A INPUT -p udp -m udp --dport 1194 -j ACCEPT $COMMENT
 eval iptables -A OUTPUT -p udp -m udp --sport 1194 -j ACCEPT $COMMENT
 
-# remove standart REJECT rules
-iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited
-iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited
+# remove standard REJECT rules
+echo "Note: standard REJECT rules for INPUT and FORWARD will be removed."
+iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited 2>/dev/null
+iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited 2>/dev/null
 
 iptables-save | awk '($0 !~ /^-A/)||!($0 in a) {a[$0];print}' > $IPTABLES
 iptables -F

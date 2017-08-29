@@ -9,14 +9,15 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 echo
+echo "Creating backup..."
+$DIR/backup.sh
+
+echo
 echo "Installing strongSwan and xl2tp server..."
-if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
-	apt-get -y install strongswan xl2tpd cron iptables procps net-tools
-fi
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	yum -y install epel-release
-	yum -y install strongswan xl2tpd cronie iptables-services procps net-tools
 fi
+eval $INSTALLER strongswan xl2tpd ppp $CRON_PACKAGE $IPTABLES_PACKAGE procps net-tools
 
 echo
 echo "Configuring routing..."
@@ -60,5 +61,5 @@ service xl2tpd restart
 service strongswan restart
 
 echo
-echo "Installation script completed!"
+echo "Installation script has been completed!"
 

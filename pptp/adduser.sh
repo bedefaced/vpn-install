@@ -62,10 +62,8 @@ do
 		echo "$CHAPSECRETS has been updated!"
 	fi
 
-	STARTDIR=$(pwd)
-
-	mkdir -p "$STARTDIR/$LOGIN"
-	DISTFILE=$STARTDIR/$LOGIN/setup.sh
+	mkdir -p "$DIR/$LOGIN"
+	DISTFILE=$DIR/$LOGIN/setup.sh
 	cp -rf $DIR/setup.sh.dist "$DISTFILE"
 	sed -i -e "s@_LOGIN_@$LOGIN@g" "$DISTFILE"
 	sed -i -e "s@_PASSWORD_@$PASSWORD@g" "$DISTFILE"
@@ -73,9 +71,9 @@ do
 	sed -i -e "s@_LOCALPREFIX_@$LOCALPREFIX@g" "$DISTFILE"
 	chmod +x "$DISTFILE"
 	USERNAME=${SUDO_USER:-$USER}
-	chown -R $USERNAME:$USERNAME $STARTDIR/$LOGIN/
+	chown -R $USERNAME:$USERNAME $DIR/$LOGIN/
 	echo
-	echo "Directory $STARTDIR/$LOGIN with client-side installation script has been created."
+	echo "Directory $DIR/$LOGIN with client-side installation script has been created."
 
 	if [[ $# -eq 0 ]]; then
 		echo

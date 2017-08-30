@@ -128,24 +128,38 @@ fi
 # restore files
 echo -e "echo \"Restoring configs...\"" >>$UNINSTALL_SCRIPT
 if [[ -n "$(which pppd)" ]]; then
-	echo -e "cp -i \"\$DIR/options.xl2tpd\" $PPPCONFIG" >>$UNINSTALL_SCRIPT
-	echo -e "cp -i \"\$DIR/chap-secrets\" $CHAPSECRETS" >>$UNINSTALL_SCRIPT
+	if [ -e "$DIR/options.xl2tpd" ]; then
+		echo -e "cp -i \"\$DIR/options.xl2tpd\" $PPPCONFIG" >>$UNINSTALL_SCRIPT
+	fi
+	if [ -e "$DIR/chap-secrets" ]; then
+		echo -e "cp -i \"\$DIR/chap-secrets\" $CHAPSECRETS" >>$UNINSTALL_SCRIPT
+	fi
 fi
 if [[ -n "$(which xl2tpd)" ]]; then
-	echo -e "cp -i \"\$DIR/xl2tpd.conf\" $XL2TPDCONFIG" >>$UNINSTALL_SCRIPT
+	if [ -e "$DIR/xl2tpd.conf" ]; then
+		echo -e "cp -i \"\$DIR/xl2tpd.conf\" $XL2TPDCONFIG" >>$UNINSTALL_SCRIPT
+	fi
 fi
 
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
 	if [[ -n "$(which strongswan)" ]]; then
-		echo -e "cp -i \"\$DIR/ipsec.secrets\" $SECRETSFILE" >>$UNINSTALL_SCRIPT
-		echo -e "cp -i \"\$DIR/ipsec.conf\" $IPSECCONFIG" >>$UNINSTALL_SCRIPT
+		if [ -e "$DIR/ipsec.secrets" ]; then
+			echo -e "cp -i \"\$DIR/ipsec.secrets\" $SECRETSFILE" >>$UNINSTALL_SCRIPT
+		fi
+		if [ -e "$DIR/ipsec.conf" ]; then
+			echo -e "cp -i \"\$DIR/ipsec.conf\" $IPSECCONFIG" >>$UNINSTALL_SCRIPT
+		fi
 	fi
 fi
 
 if [ "$PLATFORM" == "$DEBIANPLATFORM" ]; then
 	if [[ -n "$(which ipsec)" ]]; then
-		echo -e "cp -i \"\$DIR/ipsec.secrets\" $SECRETSFILE" >>$UNINSTALL_SCRIPT
-		echo -e "cp -i \"\$DIR/ipsec.conf\" $IPSECCONFIG" >>$UNINSTALL_SCRIPT
+		if [ -e "$DIR/ipsec.secrets" ]; then
+			echo -e "cp -i \"\$DIR/ipsec.secrets\" $SECRETSFILE" >>$UNINSTALL_SCRIPT
+		fi
+		if [ -e "$DIR/ipsec.conf" ]; then
+			echo -e "cp -i \"\$DIR/ipsec.conf\" $IPSECCONFIG" >>$UNINSTALL_SCRIPT
+		fi
 	fi
 fi
 

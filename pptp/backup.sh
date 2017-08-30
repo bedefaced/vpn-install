@@ -115,11 +115,17 @@ fi
 # restore files
 echo -e "echo \"Restoring configs...\"" >>$UNINSTALL_SCRIPT
 if [[ -n "$(which pptpd)" ]]; then
-	echo -e "cp -i \"\$DIR/pptpd.conf\" $PPTPDCONFIG" >>$UNINSTALL_SCRIPT
+	if [ -e "$DIR/pptpd.conf" ]; then
+		echo -e "cp -i \"\$DIR/pptpd.conf\" $PPTPDCONFIG" >>$UNINSTALL_SCRIPT
+	fi
 fi
 if [[ -n "$(which pppd)" ]]; then
-	echo -e "cp -i \"\$DIR/options.pptp\" $PPTPOPTIONS" >>$UNINSTALL_SCRIPT
-	echo -e "cp -i \"\$DIR/chap-secrets\" $CHAPSECRETS" >>$UNINSTALL_SCRIPT
+	if [ -e "$DIR/options.pptp" ]; then
+		echo -e "cp -i \"\$DIR/options.pptp\" $PPTPOPTIONS" >>$UNINSTALL_SCRIPT
+	fi
+	if [ -e "$DIR/chap-secrets" ]; then
+		echo -e "cp -i \"\$DIR/chap-secrets\" $CHAPSECRETS" >>$UNINSTALL_SCRIPT
+	fi
 fi
 
 # restore pptpd if necessary

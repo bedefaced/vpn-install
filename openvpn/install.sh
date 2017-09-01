@@ -16,8 +16,9 @@ $DIR/backup.sh
 
 echo
 echo "Installing OpenVPN..."
+eval $PCKTMANAGER update
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
-	yum -y install epel-release
+	eval $INSTALLER epel-release
 fi
 eval $INSTALLER openvpn easy-rsa $CRON_PACKAGE $IPTABLES_PACKAGE procps net-tools
 

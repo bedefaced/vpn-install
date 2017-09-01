@@ -8,8 +8,9 @@ if [ -n "$(. /etc/os-release; echo $NAME | grep -i Ubuntu)" -o -n "$(. /etc/os-r
 
 	IPTABLES_PACKAGE="iptables"
 	CRON_PACKAGE="cron"
-	INSTALLER="apt-get -y install"
-	UNINSTALLER="apt-get purge --auto-remove"
+	PCKTMANAGER="apt-get"
+	INSTALLER="$PCKTMANAGER -y install"
+	UNINSTALLER="$PCKTMANAGER purge --auto-remove"
 fi
 
 if [ -n "$(. /etc/os-release; echo $NAME | grep -i CentOS)" ]; then
@@ -17,8 +18,9 @@ if [ -n "$(. /etc/os-release; echo $NAME | grep -i CentOS)" ]; then
 
 	IPTABLES_PACKAGE="iptables-services"
 	CRON_PACKAGE="cronie"
-	INSTALLER="yum -y install"
-	UNINSTALLER="yum remove"
+	PCKTMANAGER="yum"
+	INSTALLER="$PCKTMANAGER -y install"
+	UNINSTALLER="$PCKTMANAGER remove"
 fi
 
 SYSCTLCONFIG=/etc/sysctl.conf

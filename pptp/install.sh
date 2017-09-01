@@ -14,8 +14,9 @@ $DIR/backup.sh
 
 echo
 echo "Installing PPTP server..."
+eval $PCKTMANAGER update
 if [ "$PLATFORM" == "$CENTOSPLATFORM" ]; then
-	yum -y install epel-release
+	eval $INSTALLER epel-release
 fi
 eval $INSTALLER ppp pptpd $CRON_PACKAGE $IPTABLES_PACKAGE procps net-tools
 

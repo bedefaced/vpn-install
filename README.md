@@ -150,7 +150,7 @@ You can also use Ubuntu standard Network Manager for OpenVPN connection if you i
 
 **On Windows:**
 
-Download OpenVPV GUI client: [https://openvpn.net/index.php/open-source/downloads.html](https://openvpn.net/index.php/open-source/downloads.html).
+Download OpenVPN GUI client: [https://openvpn.net/index.php/open-source/downloads.html](https://openvpn.net/index.php/open-source/downloads.html).
 
 Import config and connect, or run explorer context menu command.
 
